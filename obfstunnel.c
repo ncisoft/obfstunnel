@@ -1043,6 +1043,7 @@ int ot_listen() {
 	int ret;
 	int lisport;
 	struct sockaddr_in addr;
+	int reuse = 1;
 	
 	if (otcfg_side == OT_SIDE_SERVER) {
 		lisport = otcfg_server_port;
@@ -1061,6 +1062,10 @@ int ot_listen() {
 		exit(-1);
 	}
 	
+	if (setsockopt(fsd, SOL_SOCKET, SO_REUSEADDR, (char *)&reuse, sizeof(reuse))==-1) {
+		perror("reuse socket");
+		exit(-1);
+	} 
 	ret = bind(fsd, (struct sockaddr*)&addr, sizeof(addr));
 	if (ret < 0) {
 		OT_LOGE("Could not bind on address %s:%d: %s\n", inet_ntoa(addr.sin_addr), ntohs(addr.sin_port), strerror(errno));
