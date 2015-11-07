@@ -1063,9 +1063,10 @@ int ot_listen() {
 	}
 	
 	if (setsockopt(fsd, SOL_SOCKET, SO_REUSEADDR, (char *)&reuse, sizeof(reuse))==-1) {
-		perror("reuse socket");
-		exit(-1);
+	  perror("reuse socket");
+	  exit(-1);
 	} 
+
 	ret = bind(fsd, (struct sockaddr*)&addr, sizeof(addr));
 	if (ret < 0) {
 		OT_LOGE("Could not bind on address %s:%d: %s\n", inet_ntoa(addr.sin_addr), ntohs(addr.sin_port), strerror(errno));
